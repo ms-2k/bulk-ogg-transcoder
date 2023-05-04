@@ -3,10 +3,11 @@ from os.path import join as join_path, isdir
 from multiprocessing import Process
 import subprocess
 
+#wip
+
 def encode(path, opath, file_name, num, bitrate):
     input_path = join_path(path, file_name)
     output_path = join_path(opath, str(num) + '.ogg')
-    #print(f'ffmpeg -i "{input_path}" -y -c:a libvorbis -map 0:a -b:a {bitrate}k "{output_path}"')
     cmd = f'ffmpeg -i "{input_path}" -y -c:a libvorbis -map 0:a -b:a {bitrate}k "{output_path}"'
     process = subprocess.run(cmd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
     if process.returncode == 0:
@@ -22,7 +23,6 @@ def encode_all(path, opath, bitrate):
             continue
         Process(target = encode, args = (path, opath, file_name, num, bitrate)).start()
         num += 1
-        #encode(path, opath, file_name, bitrate)
 
 if __name__ == '__main__':
     path = input('input: ')
