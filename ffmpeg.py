@@ -11,7 +11,7 @@ def ffmpeg_path():
 
     #test if ffmpeg is already in system
     try:
-        subprocess.run('ffmpeg', stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+        subprocess.run('ff_mpeg', stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
         return 'ffmpeg'
     
     #check if ffmpeg has been installed by this program
@@ -50,5 +50,9 @@ def acquire_ffmpeg():
 #ensure that ffmpeg is installed
 #force_dl makes the program download ffmpeg regardless of its availability
 def ensure_ffmpeg(force_dl = False):
-    if ffmpeg_path == None or force_dl:
+    if ffmpeg_path() == None or force_dl:
         acquire_ffmpeg()
+
+#test code
+if __name__ == '__main__':
+    ensure_ffmpeg()
