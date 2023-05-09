@@ -29,7 +29,10 @@ def encode(ffmpeg, ipath, opath, file_name, num, bitrate, verbose):
     cmd = f'{ffmpeg} -i "{input_path}" -y -c:a libvorbis -map 0:a -b:a {bitrate}k "{output_temp}"'
 
     #throw it into a subprocess
-    process = subprocess.run(cmd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+    startupinfo = subprocess.STARTUPINFO()
+    startupinfo.dwFlags |= subprocess.STARTF_USESHOWWINDOW
+    process = subprocess.Popen(cmd, startupinfo = startupinfo)
+    process.wait()
 
     #print return code if verbose
     if verbose:
@@ -37,8 +40,6 @@ def encode(ffmpeg, ipath, opath, file_name, num, bitrate, verbose):
 
     #if the encoding succeeds, rename the temp file to proper filename matching the original
     if process.returncode == 0:
-        if verbose:
-            print(process.stdout.decode())
         rename(output_temp, output_path)
 
 #calls encode for every .flac file
@@ -65,7 +66,6 @@ def encode_all(ffmpeg, ipath, opath, bitrate, verbose = False):
             continue
         
         #call the process and start it
-        #
         proc = Process(target = encode, args = (ffmpeg, ipath, opath, file_name, num, bitrate, verbose))
         proc.start()
         proc.join(timeout=0)

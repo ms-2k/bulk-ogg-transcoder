@@ -1,4 +1,4 @@
-import wx
+import wx, multiprocessing
 from os.path import join as join_path
 from ffmpeg import ensure_ffmpeg, ffmpeg_path
 from encode import encode_all
@@ -87,7 +87,8 @@ class FrameMain(wx.Frame):
             opath = join_path(ipath, 'output')
 
         #call encode_all
-        encode_all(ffmpeg, ipath, opath, 160)
+        if __name__ == '__main__':
+            encode_all(ffmpeg, ipath, opath, 160, True)
 
     #called when a button is clicked
     def on_click(self, event):
@@ -182,6 +183,7 @@ class FrameDialog (wx.Dialog):
 
 #main
 if __name__ == '__main__':
+    multiprocessing.freeze_support()
 
     #create app and start main loop
     app = wx.App(False)

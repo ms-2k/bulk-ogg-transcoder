@@ -11,7 +11,7 @@ def ffmpeg_path():
 
     #test if ffmpeg is already in system
     try:
-        subprocess.run('ff_mpeg', stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+        subprocess.run('ffmpeg', stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
         return 'ffmpeg'
     
     #check if ffmpeg has been installed by this program
