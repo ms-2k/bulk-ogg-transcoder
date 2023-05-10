@@ -18,7 +18,7 @@ def encode(ffmpeg, ipath, opath, file_name, num, bitrate, verbose):
     #set a temporary path for outputs as ffmpeg breaks for lots of special characters
     input_path = join_path(ipath, file_name)
     output_temp = join_path(opath, str(num) + '.ogg')
-    output_path = join_path(opath, file_name[:-5] + '.ogg')
+    output_path = join_path(opath, '.'.join(file_name.split('.')[:-1]) + '.ogg')
 
     #check if the file to output to already exists
     #remove it if it does
@@ -59,10 +59,21 @@ def encode_all(ffmpeg, ipath, opath, bitrate, verbose = False):
     #process list
     proc_list = []
 
+    #valid format list
+    #accepts flac and wav for now
+    valid_formats = ('.flac', '.wav')
+
     #iterate over every file in input path
     for file_name in listdir(ipath):
-        #skip if it isn't .flac
-        if not file_name.endswith('.flac'):
+
+        #check if it's a valid format
+        end_check = False
+        for end in valid_formats:
+            if file_name.endswith(end):
+                end_check = True
+                break
+        # skip if not one of the valid formats
+        if not end_check:
             continue
         
         #call the process and start it
